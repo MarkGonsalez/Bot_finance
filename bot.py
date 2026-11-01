@@ -3,7 +3,6 @@ import logging
 import sqlite3
 import random
 import os
-from dotenv import load_dotenv
 from datetime import datetime
 
 from aiogram import Bot, Dispatcher, F, Router
@@ -15,12 +14,10 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKe
 # ==========================================
 # НАСТРОЙКИ
 # ==========================================
-os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 DB_NAME = "finance.db"
 
-# Сюда впишите ID Димы и ID Вики
-ADMIN_IDS = [111111111, 222222222] 
 
 # Словари с фиксированными тратами
 TRANSPORT_ITEMS = {"Автобус": 65.0, "Метро Дима": 65.0, "Метро Вика": 95.0, "Такси": None, "Другое (транспорт)": None}
