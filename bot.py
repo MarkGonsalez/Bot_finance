@@ -168,7 +168,7 @@ async def cmd_start(message: Message):
         "Выбирайте действие:",
         reply_markup=get_main_keyboard()
     )
-    @router.message(Command("reset"))
+@router.message(Command("reset"))
 async def cmd_reset(message: Message):
     # Проверка: сбросить данные могут только те, кто в ADMIN_IDS (ты и Вика)
     if message.from_user.id not in ADMIN_IDS:
