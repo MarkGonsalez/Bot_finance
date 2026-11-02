@@ -10,6 +10,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.filters import CommandStart, Command
 
 # ==========================================
 # НАСТРОЙКИ
@@ -167,6 +168,21 @@ async def cmd_start(message: Message):
         "Выбирайте действие:",
         reply_markup=get_main_keyboard()
     )
+    @router.message(Command("reset"))
+async def cmd_reset(message: Message):
+    # Проверка: сбросить данные могут только те, кто в ADMIN_IDS (ты и Вика)
+    if message.from_user.id not in ADMIN_IDS:
+        await message.answer("У вас нет прав для этого действия.")
+        return
+
+    # Подключаемся к базе и удаляем все записи
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM records") 
+    conn.commit()
+    conn.close()
+    
+    await message.answer("💥 <b>Все данные успешно обнулены!</b>\nНачинаем копить с нуля. Афина одобряет.", parse_mode="HTML")
 
 @router.message(F.text == "💳 Мой баланс")
 async def show_balance(message: Message):
