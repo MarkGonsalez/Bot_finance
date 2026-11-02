@@ -61,6 +61,9 @@ def add_record(record_type, amount, category):
     conn.commit()
     conn.close()
 
+# Добавляем стартовый капитал копилки прямо перед функцией
+INITIAL_SAVINGS = 25000.0 
+
 def get_balance():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -74,7 +77,10 @@ def get_balance():
     savings_out = cursor.fetchone()[0] or 0.0
     conn.close()
     
-    savings = savings_in - savings_out
+    # Теперь копилка это: стартовые 25000 + все, что вы положили - все, что взяли
+    savings = INITIAL_SAVINGS + (savings_in - savings_out)
+    
+    # Баланс считается так же (доходы - расходы - то, что лежит в копилке)
     balance = income - expense - savings
     return income, expense, savings, balance
 
